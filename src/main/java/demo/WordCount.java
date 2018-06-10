@@ -27,17 +27,22 @@ public class WordCount {
 
     @Test
     public void wordCount() {
+        //read
         p.apply(TextIO.read().from(filePath))
+                //extract
                 .apply("ExtractWords", FlatMapElements
                         .into(TypeDescriptors.strings())
                         .via((String word) -> Arrays.asList(word.split(" "))))
+                //filter
                 .apply(Filter.by((String word) -> !word.isEmpty()))
+                //count
                 .apply(Count.perElement())
+                //form
                 .apply(MapElements
                         .into(TypeDescriptors.strings())
                         .via((KV<String, Long> wordCount) -> wordCount.getKey() + " : " + wordCount.getValue()))
+                //write
                 .apply(TextIO.write().to("wordcounts"));
-//                .apply(ParDo.of(doFnFactory.getDisplayElemet()));
         p.run().waitUntilFinish();
 
     }
