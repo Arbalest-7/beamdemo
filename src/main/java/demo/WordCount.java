@@ -42,7 +42,7 @@ public class WordCount {
                         .into(TypeDescriptors.strings())
                         .via((KV<String, Long> wordCount) -> wordCount.getKey() + " : " + wordCount.getValue()))
                 //write
-                .apply(TextIO.write().to("wordcounts"));
+                .apply(TextIO.write().to("target/wordcounts"));
         p.run().waitUntilFinish();
 
     }
